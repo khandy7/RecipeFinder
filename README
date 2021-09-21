@@ -1,1 +1,8 @@
-Auth is implemented, next look into adding loading symbols while loading user data and which apis to use
+### Completed
+- Authentication
+- Protected routes (for all basic pages, ie. base pages)
+- Basic navigation
+
+### Todo
+- Look into which apis to use
+- Start mapping out how to get all user data
