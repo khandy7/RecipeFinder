@@ -7,6 +7,7 @@ import Loader from './Loader';
   export default function Login() {
     const [loginUsername, setLoginUsername] = useState("");
     const [loginPassword, setLoginPassword] = useState("");
+    const [loginError, setLoginError] = useState(null);
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
@@ -23,6 +24,7 @@ import Loader from './Loader';
    }, []) 
 
     const login = () => {
+      setLoginError(null);
       axios({
         method: "POST",
         data: {
@@ -35,6 +37,7 @@ import Loader from './Loader';
         if (res.data === "Successfully Authenticated") {
           window.location.href = "/"
         } else {
+          setLoginError("Incorrect username or password.");
           console.log("Incorrect username or password.");
         }
       });
@@ -55,6 +58,11 @@ import Loader from './Loader';
             <input placeholder="Password" onChange={e => setLoginPassword(e.target.value)} />
             <button onClick={login}>Login Submit</button>
           </div>
+
+          {
+            loginError === null ? null :
+            <p className="text-red-600">{loginError}</p>
+          }
 
           <div>
             <Link to='/register'>

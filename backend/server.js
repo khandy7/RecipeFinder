@@ -9,13 +9,11 @@ const session = require("express-session");
 //--------------------END-IMPORTS--------------------
 
 
-
-
-
 //--------------------MIDDLEWARE--------------------
 dotenv.config();
 const app = express(); 
 const port = process.env.PORT || 8000;
+
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -39,9 +37,8 @@ require("./passportConfig")(passport);
 
 const userRoutes = require('./routes/user');
 const authRoutes = require('./routes/authentication');
+const ingredientRoutes = require('./routes/ingredients');
 //--------------------END-MIDDLEWARE--------------------
-
-
 
 
 
@@ -55,7 +52,7 @@ mongoose.connect(process.env.MONGODB_URI, {useNewUrlParser: true, useUnifiedTopo
 //otherwise connected and start listening on specified port
 .then(async client => {
   app.listen(port, () => {
-      console.log(`Connected to MongoDB\nListening on port ${port}`)
+      console.log(`Connected to MongoDB\nListening on port ${port}`);
   })
 })
 //--------------------END-MONGO-CONNECTION--------------------
@@ -71,6 +68,9 @@ app.use("/api/v1/user", userRoutes);
 
 //Authentication routes
 app.use("/api/v1/auth", authRoutes);
+
+//Ingredients routes
+app.use("/api/v1/ingredients", ingredientRoutes);
 
 
 //--------------------END-ROUTES--------------------

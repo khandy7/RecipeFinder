@@ -6,6 +6,7 @@ import Loader from './Loader';
   export default function Register() {
     const [registerUsername, setRegisterUsername] = useState("");
     const [registerPassword, setRegisterPassword] = useState("");
+    const [registerError, setRegisterError] = useState(null);
     const [fullName, setFullName] = useState("");
     const [loading, setLoading] = useState(true);
 
@@ -23,6 +24,7 @@ import Loader from './Loader';
    }, []) 
 
     const register = () => {
+        setRegisterError(null);
       axios({
         method: "POST",
         data: {
@@ -36,6 +38,7 @@ import Loader from './Loader';
           if (res.data === "User created") {
             window.location.href = "/login"
           } else {
+            setRegisterError("Username taken or password not good enough");
             console.log("Username taken or password not good enough")
           }
       });
@@ -54,6 +57,10 @@ import Loader from './Loader';
               <input placeholder="Username" onChange={e => setRegisterUsername(e.target.value)} />
               <input placeholder="Password" onChange={e => setRegisterPassword(e.target.value)} />
               <button onClick={register}> Register Submit</button>
+              {
+                registerError === null ? null :
+                <p className="text-red-600">{registerError}</p>
+              }
             </div>
           </div>
         }
