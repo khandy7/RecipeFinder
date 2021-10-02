@@ -6,4 +6,6 @@
 
 ### Currently under development
 
+### Tech Stack: MERN
+
 ##### Created by Kyle Handy
