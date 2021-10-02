@@ -1,8 +1,9 @@
-### Completed
-- Authentication
-- Protected routes (for all basic pages, ie. base pages)
-- Basic navigation
+## Recipe Finder
+- Search for recipes based on ingredients in your fridge
+- Search for recipes based on cuisine type
+- Save recipes for later and rate the ones you have made
+- Add friends and view their saved recipes and ratings
 
-### Todo
-- Look into which apis to use
-- Start mapping out how to get all user data
+### Currently under development
+
+##### Created by Kyle Handy
