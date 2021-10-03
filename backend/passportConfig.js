@@ -29,6 +29,7 @@ module.exports = function (passport) {
       const userInformation = {
         username: user.username,
         fullName: user.fullName,
+        pantry: user.pantry,
       };
       cb(err, userInformation);
     });

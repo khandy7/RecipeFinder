@@ -1,4 +1,6 @@
 import { useState, useEffect } from 'react';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faSquare } from '@fortawesome/free-solid-svg-icons'
 import Navbar from "./Navbar";
 import Loader from './Loader';
 
@@ -7,37 +9,97 @@ import Loader from './Loader';
     const [loading, setLoading] = useState(true)
     const [ingredients, setIngredients] = useState(null)
     //array that will hold whether an ingredient should already be checked or not
-    const [ingredientsState, setIngredientsState] = useState(null)
+    const [pantry, setPantry] = useState(null)
+    const [pantryState, setPantryState] = useState(null)
 
+    const chosen = "border-pink-300 bg-pink-300 "
+    const notChosen = ""
+    const base = " border border-2 cursor-pointer grid grid-cols-2"
+
+          //gets all necessary data for the page
           useEffect(() => {
              fetch("/api/v1/user")
              .then(res => res.json())
-             .then(res =>  {//setUser(res.username)
+             .then(function(res) {//setUser(res.username)
                 if (res.data === "No user") {
                   window.location.href = "/login";
                 } else {
                 setUser(res.username)
+                setPantry(res.pantry)
                 }
+                return res.pantry
              })
-         }, []) 
-
-         useEffect(() => {
-           fetch("/api/v1/ingredients/getAll")
-           .then(res => res.json())
-           .then(res => {
-              setIngredients(res)
-              setIngredientsState(new Array(res.length).fill(false))
-              setLoading(false)
-            })
+             .then(function(pantry){
+              fetch("/api/v1/ingredients/getAll")
+              .then(res => res.json())
+              .then(res => {
+                 setIngredients(res)
+                 const temp = new Array(res.length).fill(false)
+                 //setPantryState(new Array(res.length).fill(false))
+                 for (let i = 0; i < pantry.length; i++) {
+                   const update = res.map((item, index) => {
+                     //console.log(item.name)
+                     if (pantry.includes(item.name)) {
+                       temp[index] = true;
+                     }
+                   })
+                 }
+                 setPantryState(temp)
+                 setLoading(false)
+               })
+              }
+             )
          }, [])
 
 
+         function handleOnChange(name, pos) {
+           const update = pantryState.map((item , index) => 
+           index === pos ? !item : item
+           );
+           setPantryState(update)
+
+           let temp = pantry
+           const idx = temp.indexOf(name)
+           if (idx > -1) {
+             temp.splice(idx, 1)
+           } else {
+             temp.push(name)
+           }
+           setPantry(temp)
+           //send update to mongo here
+           fetch('/api/v1/user/updatePantry', {
+            method: 'POST',
+            headers: {'Content-Type':'application/json'},
+            body: JSON.stringify({
+                 "pantry": temp
+            })
+          })
+          .then(res => res.json())
+          .then(res => () => {
+            if (res.data === "Error") {
+              console.log("ERROR: Server error occured")
+            }
+          })
+          .catch((error) => {
+            console.log("FAILED POST")
+            console.log(error)
+          });
+         
+         }
+
          function GetIngs() {
-           return ingredients.map((ing) => <li key={ing.apiID}>{ing.name}</li>);
+           return ingredients.map((i, index) => {
+            return <li key={i.apiID}>
+              <div className={pantryState[index] ? chosen + base : notChosen + base}
+              onClick={() => handleOnChange(i.name, index)}
+              >
+                <FontAwesomeIcon className="" icon={faSquare} />
+                <p>{i.name}</p>
+              </div>
+              </li>;
+           });
          }
          
-         //To make checkbox:
-         //<input type="checkbox"/>Food
 
       return (
         <>
@@ -49,8 +111,10 @@ import Loader from './Loader';
             <h1 className="text-4xl text-center mb-4">Virtual Pantry</h1>
           {
             ingredients == null ? null :
-            <div>
-            <ul><GetIngs/></ul>
+            <div className="flex">
+              <ul className="m-auto grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 p-4">
+                <GetIngs/>
+              </ul>
             </div>
           }
           </div>
