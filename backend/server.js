@@ -38,6 +38,7 @@ require("./passportConfig")(passport);
 const userRoutes = require('./routes/user');
 const authRoutes = require('./routes/authentication');
 const ingredientRoutes = require('./routes/ingredients');
+const searchRoutes = require("./routes/searchRecipes");
 //--------------------END-MIDDLEWARE--------------------
 
 
@@ -71,6 +72,9 @@ app.use("/api/v1/auth", authRoutes);
 
 //Ingredients routes
 app.use("/api/v1/ingredients", ingredientRoutes);
+
+//Search for recipes routes
+app.use("/api/v1/findRecipes", searchRoutes);
 
 
 //--------------------END-ROUTES--------------------

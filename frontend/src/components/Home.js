@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faSquare } from '@fortawesome/free-solid-svg-icons'
+import { } from '@fortawesome/free-solid-svg-icons'
+import { faSquare, faCheckCircle } from "@fortawesome/free-regular-svg-icons"
 import Navbar from "./Navbar";
 import Loader from './Loader';
 
@@ -12,7 +13,7 @@ import Loader from './Loader';
     const [pantry, setPantry] = useState(null)
     const [pantryState, setPantryState] = useState(null)
 
-    const chosen = "border-pink-300 bg-pink-300 "
+    const chosen = "border-pink-300 bg-pink-300 font-bold "
     const notChosen = ""
     const base = " border border-2 cursor-pointer grid grid-cols-2"
 
@@ -51,7 +52,7 @@ import Loader from './Loader';
              )
          }, [])
 
-
+        //handles adding/removing of ingredients from pantry
          function handleOnChange(name, pos) {
            const update = pantryState.map((item , index) => 
            index === pos ? !item : item
@@ -87,14 +88,15 @@ import Loader from './Loader';
          
          }
 
+          //gets all ingredients to display for user
          function GetIngs() {
            return ingredients.map((i, index) => {
             return <li key={i.apiID}>
               <div className={pantryState[index] ? chosen + base : notChosen + base}
               onClick={() => handleOnChange(i.name, index)}
               >
-                <FontAwesomeIcon className="" icon={faSquare} />
-                <p>{i.name}</p>
+                <FontAwesomeIcon className="ml-4 text-4xl md:text-4xl lg:text-5xl" icon={pantryState[index] ? faCheckCircle : faSquare} />
+                <p className="text-lg lg:text-xl">{i.name}</p>
               </div>
               </li>;
            });
@@ -112,7 +114,7 @@ import Loader from './Loader';
           {
             ingredients == null ? null :
             <div className="flex">
-              <ul className="m-auto grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 p-4">
+              <ul className="m-auto grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 p-4">
                 <GetIngs/>
               </ul>
             </div>

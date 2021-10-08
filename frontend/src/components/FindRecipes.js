@@ -9,13 +9,20 @@ import Loader from './Loader';
     const [virtualPantryClasses, setvirtualPantryClasses] = useState("text-red-500 font-bold");
     const [cuisineClasses, setCuisineClasses] = useState("text-gray-500");
     const [cuisineSearch, setCuisineSearch] = useState("All Cuisines")
+    const [pantrySearchRank, setPantrySearchRank] = useState("Maximize Used Ingredients")
+    const [cuisineFoundRecipes, setCuisineFoundRecipes] = useState(null);
+    const [pantryFoundRecipes, setPantryFoundRecipes] = useState(null);
+    const [pantry, setPantry] = useState(null);
 
     const cuisines = ["All Cuisines", "African", "American", "British", "Cajun", "Caribbean", "Chinese", "Eastern European",
     "European", "French", "German", "Greek", "Indian", "Irish", "Italian", "Japanese", "Jewish", "Korean",
     "Latin American", "Mediterranean", "Mexican", "Middle Eastern", "Nordic", "Southern", "Spanish", "Thai", "Vietnamese"]
 
+    const pantryRanks = ["Maximize Used Ingredients", "Minimize Missing Ingredients"]
+
     const active = "text-red-500 font-bold"
     const notActive = "text-gray-500"
+
     //if User exists grab it, if not redirect to login page
     useEffect(() => {
        fetch("/api/v1/user")
@@ -25,11 +32,11 @@ import Loader from './Loader';
            window.location.href = "/login";
          } else {
           setUser(res.username)
+          setPantry(res.pantry)
           setLoading(false)
          }
        })
    }, []) 
-
 
     const onChangeSearchCuisine = e => {
       const searchCuisine = e.target.value;
@@ -51,6 +58,118 @@ import Loader from './Loader';
       }
    }
 
+
+   //changes dropdown for pantry rank
+   const onChangePantryRank = e => {
+     const newRank = e.target.value;
+     setPantrySearchRank(newRank);
+   }
+
+  //makes api call to backend to perform actual search for cuisine
+   function PerformCusineSearch() {
+     fetch("/api/v1/findRecipes/cuisineSearch", {
+      method: 'POST',
+      headers: {'Content-Type':'application/json'},
+      body: JSON.stringify({
+           "cuisine": cuisineSearch,
+      })
+    })
+     .then(res => res.json())
+     .then(res => {
+       //console.log(res.data.results)
+       setCuisineFoundRecipes(res.data.results)
+     })
+   }
+
+   function PerformPantrySearch() {
+    const ranking = (pantrySearchRank === "Maximize Used Ingredients" ? 1 : 2)
+
+    fetch("/api/v1/findRecipes/pantrySearch", {
+     method: 'POST',
+     headers: {'Content-Type':'application/json'},
+     body: JSON.stringify({
+          "pantry": pantry,
+          "rank" : ranking,
+     })
+   })
+    .then(res => res.json())
+    .then(res => {
+      setPantryFoundRecipes(res.data)
+    })
+  }
+
+    //UI for searching by cuisine
+   const SearchByCuisine = () => {
+     return(
+        <div>
+        <select value={cuisineSearch} onChange={onChangeSearchCuisine}>
+          {cuisines.map(cuisine => {
+            return (
+              <option value={cuisine} key={cuisine}> {cuisine.substr(0, 20)} </option>
+            )
+          })}
+      </select>
+      <button className="bg-pink-500 hover:bg-pink-700 text-white font-bold py-2 px-4 rounded"
+        onClick={PerformCusineSearch}
+      >
+        Search
+      </button>
+        <div className="grid gap-4 grid-cols-1 md:grid-cols-2 lg:grid-cols-3 content-center">
+          {
+            cuisineFoundRecipes === null ? null 
+            :
+            cuisineFoundRecipes.map(recipe => {
+              return (
+                <div key={recipe.id} className="border-2 text-center">
+                  <img src={recipe.image} className="self-center" />
+                  {recipe.title}
+                </div>
+              );
+            })
+          }
+        </div>
+      </div>
+     )
+    }
+
+
+
+     const SearchByPantry = () => {
+       return(
+         <div>
+           <div>
+             <select value={pantrySearchRank} onChange={onChangePantryRank}>
+                {pantryRanks.map(rank => {
+                return (
+                  <option value={rank} key={rank}> {rank} </option>
+                )
+              })}
+             </select>
+           </div>
+           <button className="bg-pink-500 hover:bg-pink-700 text-white font-bold py-2 px-4 rounded"
+            onClick={PerformPantrySearch}
+          >
+            Search
+          </button>
+              {
+                pantryFoundRecipes === null ? null 
+                :
+                <div className="flex grid gap-4 grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
+                  {pantryFoundRecipes.map(recipe => {
+                    return (
+                      <div key={recipe.id} className="border-2 text-center m-auto">
+                        <img src={recipe.image} className="" />
+                        {recipe.title.length > 30 ? recipe.title.substr(0,30) + "..." : recipe.title}
+                      </div>
+                    );
+                  })}
+                </div>
+              }
+           
+         </div>
+       );
+     }
+
       return (
         <>
         <Navbar/>
@@ -68,19 +187,9 @@ import Loader from './Loader';
 
               {
                 activeSearch === "virtual pantry" ?
-                <div>
-                  VP SEARCH
-                </div>
+                <SearchByPantry/>
                 :
-                <div>
-                  <select onChange={onChangeSearchCuisine}>
-                    {cuisines.map(cuisine => {
-                      return (
-                        <option value={cuisine} key={cuisine}> {cuisine.substr(0, 20)} </option>
-                      )
-                    })}
-                 </select>
-                </div>
+                <SearchByCuisine/>
               }
 
             </div>
