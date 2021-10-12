@@ -12,37 +12,58 @@ import Login from "./components/Login";
 import Profile from "./components/Profile";
 import Register from "./components/Register";
 import NotFound from "./components/NotFound";
+//import ViewRecipe from "./components/ViewRecipe";
 
+/*  
+This works to launch new page to view recipe by id
+it works but not sure its what i need, doing it this way will
+remove all of the searched recipes from the state, making the user have to search again
+I think itll be better to have a popup window with the recipe search page 
+          <Route path="/viewRecipe/:id"
+          render={(props) => (
+            <ViewRecipe {...props} />
+          )} >
+          </Route>
+*/
 
 function App() {
   return (
     <div className="App">
       <Router>
         <Switch>
+          
           <Route exact path="/">
             <Home/>
           </Route>
+
           <Route path="/friends">
             <Friends/>
           </Route>
+
           <Route path="/myrecipes">
             <MyRecipes/>
           </Route>
+
           <Route path="/findrecipes">
             <FindRecipes/>
           </Route>
+
           <Route path="/login">
             <Login/>
           </Route>
+
           <Route path="/register">
             <Register/>
           </Route>
+
           <Route path="/profile">
             <Profile/>
           </Route>
+
           <Route>
             <NotFound/>
           </Route>
+
         </Switch>
       </Router>
     </div>

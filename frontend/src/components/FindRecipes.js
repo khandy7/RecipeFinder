@@ -1,6 +1,9 @@
 import { useState, useEffect } from 'react';
 import Navbar from "./Navbar";
 import Loader from './Loader';
+import ViewRecipe from "./ViewRecipe";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faArrowLeft } from '@fortawesome/free-solid-svg-icons'
 
   export default function FindRecipes() {
     const [user, setUser] = useState(null)
@@ -13,6 +16,7 @@ import Loader from './Loader';
     const [cuisineFoundRecipes, setCuisineFoundRecipes] = useState(null);
     const [pantryFoundRecipes, setPantryFoundRecipes] = useState(null);
     const [pantry, setPantry] = useState(null);
+    const [selectedRecipe, setSelectedRecipe] = useState(null);
 
     const cuisines = ["All Cuisines", "African", "American", "British", "Cajun", "Caribbean", "Chinese", "Eastern European",
     "European", "French", "German", "Greek", "Indian", "Irish", "Italian", "Japanese", "Jewish", "Korean",
@@ -36,7 +40,11 @@ import Loader from './Loader';
           setLoading(false)
          }
        })
-   }, []) 
+   }, [])
+
+   function SelectRecipe(id) {
+     setSelectedRecipe(id)
+   }
 
     const onChangeSearchCuisine = e => {
       const searchCuisine = e.target.value;
@@ -114,15 +122,15 @@ import Loader from './Loader';
       >
         Search
       </button>
-        <div className="grid gap-4 grid-cols-1 md:grid-cols-2 lg:grid-cols-3 content-center">
+        <div className="flex grid gap-4 grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
           {
             cuisineFoundRecipes === null ? null 
             :
             cuisineFoundRecipes.map(recipe => {
               return (
-                <div key={recipe.id} className="border-2 text-center">
-                  <img src={recipe.image} className="self-center" />
-                  {recipe.title}
+                <div key={recipe.id} className="border-2 text-center m-auto cursor-pointer" onClick={() => SelectRecipe(recipe.id)}>
+                  <img src={recipe.image} className="" />
+                  {recipe.title.length > 30 ? recipe.title.substr(0,30) + "..." : recipe.title}
                 </div>
               );
             })
@@ -137,7 +145,6 @@ import Loader from './Loader';
      const SearchByPantry = () => {
        return(
          <div>
-           <div>
              <select value={pantrySearchRank} onChange={onChangePantryRank}>
                 {pantryRanks.map(rank => {
                 return (
@@ -145,7 +152,6 @@ import Loader from './Loader';
                 )
               })}
              </select>
-           </div>
            <button className="bg-pink-500 hover:bg-pink-700 text-white font-bold py-2 px-4 rounded"
             onClick={PerformPantrySearch}
           >
@@ -157,7 +163,7 @@ import Loader from './Loader';
                 <div className="flex grid gap-4 grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
                   {pantryFoundRecipes.map(recipe => {
                     return (
-                      <div key={recipe.id} className="border-2 text-center m-auto">
+                      <div key={recipe.id} className="border-2 text-center m-auto cursor-pointer" onClick={() => SelectRecipe(recipe.id)}>
                         <img src={recipe.image} className="" />
                         {recipe.title.length > 30 ? recipe.title.substr(0,30) + "..." : recipe.title}
                       </div>
@@ -176,24 +182,34 @@ import Loader from './Loader';
         {
           loading ? <Loader/>
           :
-          <div className="flex">
-            <div className="m-auto">
-              <h1 className="text-4xl text-center mb-4">Find Recipes</h1>
-
-              <div className="grid grid-cols-2 gap-2 text-center">
-                <button className={virtualPantryClasses} onClick={changeSearch}>Search by Virtual Pantry</button>
-                <button className={cuisineClasses} onClick={changeSearch}>Search by Cuisine</button>
-              </div>
-
+          <div>
               {
-                activeSearch === "virtual pantry" ?
-                <SearchByPantry/>
-                :
-                <SearchByCuisine/>
-              }
+              selectedRecipe === null ?
+              <div className="flex">
+              <div className="m-auto">
+                <h1 className="text-4xl text-center mb-4">Find Recipes</h1>
 
-            </div>
+                <div className="grid grid-cols-2 gap-2 text-center">
+                  <button className={virtualPantryClasses} onClick={changeSearch}>Search by Virtual Pantry</button>
+                  <button className={cuisineClasses} onClick={changeSearch}>Search by Cuisine</button>
+                </div>
+
+                {
+                  activeSearch === "virtual pantry" ?
+                  <SearchByPantry/>
+                  :
+                  <SearchByCuisine/>
+                }
+
+              </div>
+           </div>
+         :
+         <div className="">
+           <FontAwesomeIcon className="ml-8 text-5xl font-bold cursor-pointer" icon={faArrowLeft} onClick={()=> SelectRecipe(null)} />
+           <ViewRecipe id={selectedRecipe}/>
          </div>
+          }
+        </div>
         }
         </>
       );

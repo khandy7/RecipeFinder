@@ -50,7 +50,6 @@ router.post("/pantrySearch", (req, res) => {
 
     axios.get(searchURL)
     .then(function (response) {
-        //console.log(response.data)
         res.send({data: response.data})
     })
     .catch(function (error) {
@@ -58,6 +57,22 @@ router.post("/pantrySearch", (req, res) => {
     })
     //res.send({data: "Hey there"})
 });
+
+
+//get info on one recipe
+router.post("/getRecipeInfo", (req, res) => {
+    const id = req.body.id;
+    const searchUrl = "https://api.spoonacular.com/recipes/" + id + "/information?apiKey=" + process.env.SPOONACULAR_API_KEY
+    //send req to spoonacular to get recipe info
+    axios.get(searchUrl)
+    .then(function (response) {
+        res.send({data: response.data})
+    })
+    .catch(function (error) {
+        res.send({data: error});
+    })
+    //res.send({data: "hey"})
+})
 
 
 
