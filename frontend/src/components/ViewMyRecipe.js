@@ -1,12 +1,17 @@
 import { useState, useEffect } from 'react';
 import Loader from './Loader';
+import Navbar from './Navbar';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faArrowLeft } from '@fortawesome/free-solid-svg-icons'
+import { Link } from 'react-router-dom';
 
-
-export default function ViewRecipe({ id }) {
+export default function ViewMyRecipe(props) {
     const [recipe, setRecipe] = useState(null);
     const [selected, setSelected] = useState(null);
     const [user, setUser] = useState(null);
     const [userRecipes, setUserRecipes] = useState(null);
+    
+    const id = props.match.params.id
 
     useEffect(() => {
         fetch("/api/v1/user")
@@ -99,11 +104,14 @@ export default function ViewRecipe({ id }) {
 
     return (
         <div>
+            <Navbar/>
             {
                 recipe === null ? <Loader />
                 :
                 <div>
-        
+                <Link to="/myrecipes">
+                    <FontAwesomeIcon className="ml-8 text-5xl font-bold cursor-pointer" icon={faArrowLeft} />
+                </Link>
                     <div className="flex">
                         <div className="text-center text-3xl font-bold m-auto">
                             {recipe.title}

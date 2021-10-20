@@ -12,7 +12,7 @@ import Login from "./components/Login";
 import Profile from "./components/Profile";
 import Register from "./components/Register";
 import NotFound from "./components/NotFound";
-//import ViewRecipe from "./components/ViewRecipe";
+import ViewMyRecipe from "./components/ViewMyRecipe";
 
 /*  
 This works to launch new page to view recipe by id
@@ -58,6 +58,12 @@ function App() {
 
           <Route path="/profile">
             <Profile/>
+          </Route>
+
+          <Route path="/viewRecipe/:id"
+          render={(props) => (
+            <ViewMyRecipe {...props} />
+          )} >
           </Route>
 
           <Route>

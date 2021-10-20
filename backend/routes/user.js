@@ -26,9 +26,22 @@ router.post('/updatePantry', (req, res) => {
                 console.log(err)
                 res.send({data: "Error"})
             } else {
-                res.send({data: "Updated"})
+                res.send({data: "Updated pantry"})
             }
         });
+});
+
+router.post("/updateRecipes", (req, res) => {
+    User.updateOne({username: req.user.username},
+        {recipes: req.body.recipes}, (err, docs) => {
+            if (err) {
+                //console.log(err)
+                res.send({data:"Error"})
+            } else {
+                //console.log("BOUTTA SEND UPDATE")
+                res.send({data:"Updated recipes"})
+            }
+        })
 });
 
 //testing separate route files, this route is accessable from:

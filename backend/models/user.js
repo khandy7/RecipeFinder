@@ -5,6 +5,7 @@ var user = new mongoose.Schema({
   username: String,
   password: String,
   pantry: Array,
+  recipes: Array,
 });
 
 module.exports = mongoose.model("User", user);

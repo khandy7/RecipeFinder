@@ -17,6 +17,7 @@ import { faArrowLeft } from '@fortawesome/free-solid-svg-icons'
     const [pantryFoundRecipes, setPantryFoundRecipes] = useState(null);
     const [pantry, setPantry] = useState(null);
     const [selectedRecipe, setSelectedRecipe] = useState(null);
+    const [error, setError] = useState(null)
 
     const cuisines = ["All Cuisines", "African", "American", "British", "Cajun", "Caribbean", "Chinese", "Eastern European",
     "European", "French", "German", "Greek", "Indian", "Irish", "Italian", "Japanese", "Jewish", "Korean",
@@ -35,7 +36,7 @@ import { faArrowLeft } from '@fortawesome/free-solid-svg-icons'
          if (res.data === "No user") {
            window.location.href = "/login";
          } else {
-          setUser(res.username)
+          setUser(res)
           setPantry(res.pantry)
           setLoading(false)
          }
@@ -75,6 +76,7 @@ import { faArrowLeft } from '@fortawesome/free-solid-svg-icons'
 
   //makes api call to backend to perform actual search for cuisine
    function PerformCusineSearch() {
+     setError(null)
      fetch("/api/v1/findRecipes/cuisineSearch", {
       method: 'POST',
       headers: {'Content-Type':'application/json'},
@@ -84,14 +86,17 @@ import { faArrowLeft } from '@fortawesome/free-solid-svg-icons'
     })
      .then(res => res.json())
      .then(res => {
-       //console.log(res.data.results)
-       setCuisineFoundRecipes(res.data.results)
+      if (res.data.name === "Error") {
+        setError("API ERROR, TRY AGAIN TOMORROW")
+      } else{
+        setCuisineFoundRecipes(res.data.results)
+      }
      })
    }
 
    function PerformPantrySearch() {
     const ranking = (pantrySearchRank === "Maximize Used Ingredients" ? 1 : 2)
-
+    setError(null)
     fetch("/api/v1/findRecipes/pantrySearch", {
      method: 'POST',
      headers: {'Content-Type':'application/json'},
@@ -102,7 +107,11 @@ import { faArrowLeft } from '@fortawesome/free-solid-svg-icons'
    })
     .then(res => res.json())
     .then(res => {
-      setPantryFoundRecipes(res.data)
+      if (res.data.name === "Error") {
+        setError("API ERROR, TRY AGAIN TOMORROW")
+      } else{
+        setPantryFoundRecipes(res.data) 
+      }
     })
   }
 
@@ -123,6 +132,13 @@ import { faArrowLeft } from '@fortawesome/free-solid-svg-icons'
         Search
       </button>
         <div className="flex grid gap-4 grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
+          {
+            error === null ? null
+            :
+            <div>
+              {error}
+            </div>
+          }
           {
             cuisineFoundRecipes === null ? null 
             :
@@ -157,6 +173,13 @@ import { faArrowLeft } from '@fortawesome/free-solid-svg-icons'
           >
             Search
           </button>
+              {
+                error === null ? null
+                :
+                <div>
+                  {error}
+                </div>
+              }
               {
                 pantryFoundRecipes === null ? null 
                 :
