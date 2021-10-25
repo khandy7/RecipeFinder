@@ -41,13 +41,35 @@ router.post("/updateRecipes", (req, res) => {
                 //console.log("BOUTTA SEND UPDATE")
                 res.send({data:"Updated recipes"})
             }
-        })
+        });
 });
 
-//testing separate route files, this route is accessable from:
-//          /api/v1/user/testing
-router.get('/testing', (req, res) => {
-    res.send({data: "testing stuff"});
+
+router.post("/addFriend", (req, res) => {
+    User.findOne({username: req.body.friend}, async (err, doc) => {
+        if (err) res.send({data: "Error"});
+        if (doc) {
+            console.log("FOUND FRIEND")
+            //add friend to current user friend list,
+            //send update to mongo
+            var tmp = req.user.friends
+            tmp.push(req.body.friend)
+            User.updateOne({username: req.user.username},
+                {friends: tmp}, (err, docs) => {
+                    if (err) {
+                        //console.log(err)
+                        res.send({data:"Error"})
+                    } else {
+                        //console.log("BOUTTA SEND UPDATE")
+                        res.send({data:"Friend added", friends: tmp})
+                    }
+                });
+
+        } else {
+            res.send({data: "User does not exist"});
+        }
+      });
+    //res.send({data: "hey there"})
 });
 
 

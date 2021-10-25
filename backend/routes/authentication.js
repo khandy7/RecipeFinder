@@ -37,6 +37,7 @@ router.post("/login", (req, res, next) => {
           password: hashedPassword,
           pantry: Array,
           recipes: Array,
+          friends: Array,
         });
         await newUser.save();
         res.send("User created");

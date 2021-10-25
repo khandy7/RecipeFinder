@@ -31,6 +31,7 @@ module.exports = function (passport) {
         fullName: user.fullName,
         pantry: user.pantry,
         recipes: user.recipes,
+        friends: user.friends,
       };
       cb(err, userInformation);
     });

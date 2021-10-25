@@ -6,6 +6,7 @@ var user = new mongoose.Schema({
   password: String,
   pantry: Array,
   recipes: Array,
+  friends: Array,
 });
 
 module.exports = mongoose.model("User", user);

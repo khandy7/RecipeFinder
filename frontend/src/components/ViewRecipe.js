@@ -79,20 +79,18 @@ export default function ViewRecipe({ id }) {
             })
           })
           .then(res => res.json())
-          .then(res => () => {
-              console.log(res.data)
+          .then(res => {
             if (res.data === "Error") {
               console.log("ERROR: Server error occured")
             } else{
-                console.log("IN HERE")
+                setUserRecipes(temp)
+                setSelected(!selected)
             }
           })
           .catch((error) => {
             console.log("FAILED POST")
             //console.log(error)
           });
-          setUserRecipes(temp)
-          setSelected(!selected)
     }
 
 

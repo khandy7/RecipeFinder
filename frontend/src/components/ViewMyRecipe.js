@@ -10,6 +10,9 @@ export default function ViewMyRecipe(props) {
     const [selected, setSelected] = useState(null);
     const [user, setUser] = useState(null);
     const [userRecipes, setUserRecipes] = useState(null);
+    const [rating, setRating] = useState(null);
+    const [recipeIdx, setRecipeIdx] = useState(null);
+    const [hover, setHover] = useState(0);
     
     const id = props.match.params.id
 
@@ -24,13 +27,18 @@ export default function ViewMyRecipe(props) {
            setUserRecipes(res.recipes)
            
            var found = false
+           var idx = -1
            for (let i = 0; i < res.recipes.length; i++) {
                if (res.recipes[i][0] === String(id)) {
                    found = true
+                   idx = i
+                   break
                }
            }
            if (found) {
                setSelected(true)
+               setRating(res.recipes[idx][3])
+               setRecipeIdx(idx)
            } else {
                setSelected(false)
            }
@@ -74,8 +82,6 @@ export default function ViewMyRecipe(props) {
             //console.log(temp)
         }
 
-
-
         fetch('/api/v1/user/updateRecipes', {
             method: 'POST',
             headers: {'Content-Type':'application/json'},
@@ -84,22 +90,52 @@ export default function ViewMyRecipe(props) {
             })
           })
           .then(res => res.json())
-          .then(res => () => {
+          .then(res => {
               console.log(res.data)
             if (res.data === "Error") {
               console.log("ERROR: Server error occured")
             } else{
                 console.log("IN HERE")
+                setRating(null)
+                setHover(null)
+                setUserRecipes(temp)
+                setSelected(!selected)
             }
           })
           .catch((error) => {
             console.log("FAILED POST")
             //console.log(error)
           });
-          setUserRecipes(temp)
-          setSelected(!selected)
     }
 
+
+    function changeRating(r) {
+        
+        var curRecipes = userRecipes
+        curRecipes[recipeIdx][3] = r
+
+        fetch('/api/v1/user/updateRecipes', {
+            method: 'POST',
+            headers: {'Content-Type':'application/json'},
+            body: JSON.stringify({
+                 "recipes": curRecipes,
+            })
+          })
+          .then(res => res.json())
+          .then(res => {
+            if (res.data === "Error") {
+              console.log("ERROR: Server error occured")
+            } else{
+                setRating(r);
+                setHover(null)
+                //console.log("IN HERE")
+            }
+          })
+          .catch((error) => {
+            console.log("FAILED POST")
+            //console.log(error)
+          });
+    }
 
 
     return (
@@ -128,7 +164,29 @@ export default function ViewMyRecipe(props) {
                                 onClick={() => handleChange()}
                                 > REMOVE RECIPE</div>
                             }
+                            {
+                                !selected ? null 
+                                :
+                                <div className="star-rating text-center text-3xl">
+                                {[...Array(5)].map((star, index) => {
+                                    index += 1;
+                                    return (
+                                    <button
+                                        type="button"
+                                        key={index}
+                                        className={index <= (hover || rating) ? "text-black" : "text-gray-300"}
+                                        onClick={() => changeRating(index)}
+                                        onMouseEnter={() => setHover(index)}
+                                        onMouseLeave={() => setHover(rating)}
+                                    >
+                                        <span className="star">&#9733;</span>
+                                    </button>
+                                    );
+                                })}
+                                </div>
+                            }
                             <img src={recipe.image} className="m-auto" />
+                            
                         </div>
                     </div>
 
