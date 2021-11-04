@@ -21,7 +21,7 @@ router.get('', (req, res) => {
 router.post('/updatePantry', (req, res) => {
     //console.log(req.body.pantry);
     User.updateOne({username: req.user.username}, 
-        {pantry: req.body.pantry}, (err, docs) => {
+        {pantry: req.body.pantry, offsetMin:0, offsetMax:0}, (err, docs) => {
             if (err) {
                 console.log(err)
                 res.send({data: "Error"})
@@ -70,6 +70,17 @@ router.post("/addFriend", (req, res) => {
         }
       });
     //res.send({data: "hey there"})
+});
+
+router.post("/getFriend", (req, res) => {
+    User.findOne({username: req.body.friend}, async (err, doc) => {
+        if (err) res.send({data: "Error"})
+        if (doc) {
+            res.send({data: doc})
+        } else {
+            res.send({data: "User does not exist"})
+        }
+    });
 });
 
 

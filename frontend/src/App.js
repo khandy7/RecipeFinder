@@ -9,22 +9,10 @@ import Friends from "./components/Friends";
 import MyRecipes from "./components/MyRecipes";
 import FindRecipes from "./components/FindRecipes";
 import Login from "./components/Login";
-import Profile from "./components/Profile";
 import Register from "./components/Register";
 import NotFound from "./components/NotFound";
 import ViewMyRecipe from "./components/ViewMyRecipe";
-
-/*  
-This works to launch new page to view recipe by id
-it works but not sure its what i need, doing it this way will
-remove all of the searched recipes from the state, making the user have to search again
-I think itll be better to have a popup window with the recipe search page 
-          <Route path="/viewRecipe/:id"
-          render={(props) => (
-            <ViewRecipe {...props} />
-          )} >
-          </Route>
-*/
+import ViewFriend from "./components/ViewFriend";
 
 function App() {
   return (
@@ -56,13 +44,15 @@ function App() {
             <Register/>
           </Route>
 
-          <Route path="/profile">
-            <Profile/>
-          </Route>
-
           <Route path="/viewRecipe/:id"
           render={(props) => (
             <ViewMyRecipe {...props} />
+          )} >
+          </Route>
+
+          <Route path="/viewFriend/:username"
+          render={(props) => (
+            <ViewFriend {...props} />
           )} >
           </Route>
 

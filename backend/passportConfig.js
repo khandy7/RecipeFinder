@@ -32,6 +32,8 @@ module.exports = function (passport) {
         pantry: user.pantry,
         recipes: user.recipes,
         friends: user.friends,
+        offsetMin: user.offsetMin,
+        offsetMax: user.offsetMax,
       };
       cb(err, userInformation);
     });

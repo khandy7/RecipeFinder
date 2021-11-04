@@ -43,8 +43,8 @@ import { faArrowLeft } from '@fortawesome/free-solid-svg-icons'
                     <div className="grid gap-2 md:grid-cols-2 lg:grid-cols-3 p-2">
                       {recipes.map(recipe => {
                       return (
-                        <div className="text-center">
-                        <Link key={recipe[0]} className="text-center m-auto cursor-pointer" to={"/viewRecipe/" + recipe[0]}>
+                        <div key={recipe[0]} className="text-center">
+                        <Link className="text-center m-auto cursor-pointer" to={"/viewRecipe/" + recipe[0]}>
                           <img src={recipe[2]} className="" />
                           {recipe[1].length > 30 ? recipe[1].substr(0,30) + "..." : recipe[1]}
                         </Link>

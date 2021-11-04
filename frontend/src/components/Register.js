@@ -25,23 +25,27 @@ import Loader from './Loader';
 
     const register = () => {
         setRegisterError(null);
-      axios({
-        method: "POST",
-        data: {
-          fullName: fullName,
-          username: registerUsername,
-          password: registerPassword,
-        },
-        withCredentials: true,
-        url: "http://localhost:5000/api/v1/auth/register",
-      }).then((res) => {
-          if (res.data === "User created") {
-            window.location.href = "/login"
-          } else {
-            setRegisterError("Username taken or password not good enough");
-            console.log("Username taken or password not good enough")
-          }
-      });
+       // if (registerUsername.length() < 4) {
+       //   setRegisterError("Username must be more than 3 characters long")
+        //} else {
+          axios({
+            method: "POST",
+            data: {
+              fullName: fullName,
+              username: registerUsername,
+              password: registerPassword,
+            },
+            withCredentials: true,
+            url: "http://localhost:5000/api/v1/auth/register",
+          }).then((res) => {
+              if (res.data === "User created") {
+                window.location.href = "/login"
+              } else {
+                setRegisterError("Username taken or password not good enough");
+                console.log("Username taken or password not good enough")
+              }
+          });
+        //}
     };
 
       return (

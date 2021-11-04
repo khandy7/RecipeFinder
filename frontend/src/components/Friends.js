@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import Navbar from "./Navbar";
 import Loader from './Loader';
+import { Link } from 'react-router-dom';
 
   export default function Friends() {
     const [user, setUser] = useState(null)
@@ -84,12 +85,12 @@ import Loader from './Loader';
             {
               !friends ? null : friends.length === 0 
               ? <div className="text-center m-4">No friends yet</div> 
-              : <div className="m-4">
+              : <div className="m-4 flex grid grid-cols-3">
                   {friends.map(friend => {
                   return (
-                    <div className="text-center" key={friend}>
+                    <Link className="text-center" key={friend} to={"/viewFriend/" + friend}>
                       {friend}
-                    </div>
+                    </Link>
                   );
                 })}
               </div>

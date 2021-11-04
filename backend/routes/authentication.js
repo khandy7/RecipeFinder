@@ -38,6 +38,8 @@ router.post("/login", (req, res, next) => {
           pantry: Array,
           recipes: Array,
           friends: Array,
+          offsetMin: 0,
+          offsetMax: 0,
         });
         await newUser.save();
         res.send("User created");

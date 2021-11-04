@@ -59,6 +59,19 @@ export default function Navbar({ fixed }) {
             id="example-navbar-danger"
           >
             <ul className="flex flex-col lg:flex-row list-none lg:ml-auto">
+            <li className="nav-item">
+                  <Link
+                    className="px-3 py-2 flex items-center text-xs uppercase font-bold leading-snug text-white hover:opacity-75"
+                    to="/"
+                    onClick={() => {
+                      if (navbarOpen) {
+                          setNavbarOpen(!navbarOpen);
+                      }
+                    }}
+                  >
+                    <i className="fab fa-pinterest text-lg leading-lg text-white opacity-75"></i><span className="ml-2">Home</span>
+                  </Link>
+                </li>
               <li className="nav-item">
                 <Link
                   className="px-3 py-2 flex items-center text-xs uppercase font-bold leading-snug text-white hover:opacity-75"
@@ -100,19 +113,6 @@ export default function Navbar({ fixed }) {
                     </Link>
                   </li>
 
-                  <li className="nav-item">
-                  <Link
-                    className="px-3 py-2 flex items-center text-xs uppercase font-bold leading-snug text-white hover:opacity-75"
-                    to="/profile"
-                    onClick={() => {
-                      if (navbarOpen) {
-                          setNavbarOpen(!navbarOpen);
-                      }
-                    }}
-                  >
-                    <i className="fab fa-pinterest text-lg leading-lg text-white opacity-75"></i><span className="ml-2">Profile</span>
-                  </Link>
-                </li>
               <li className="nav-item">
 
                 {

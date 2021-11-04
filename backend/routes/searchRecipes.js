@@ -2,6 +2,7 @@ const express = require("express");
 const router = express.Router();
 const dotenv = require("dotenv");
 const axios = require("axios")
+const User = require('../models/user');
 dotenv.config();
 
 router.get('', (req, res) => {
@@ -34,6 +35,19 @@ router.post('/cuisineSearch', (req, res) => {
 router.post("/pantrySearch", (req, res) => {
     let ings = "&ingredients="
     const rank = "&ranking=" + req.body.rank
+    let offset = "&offset="
+    let min = req.user.offsetMin
+    let max = req.user.offsetMax
+    if (req.body.rank === 1) {
+        offset += max
+        max += 3
+    } else {
+        offset += min
+        min += 3
+    }
+    console.log(min)
+    console.log(max)
+    const userRecipes = req.user.recipes
 
     //parse ingredients to get list that works with api
     for (let i = 0; i < req.body.pantry.length; i++) {
@@ -45,17 +59,34 @@ router.post("/pantrySearch", (req, res) => {
             ings += "+" + req.body.pantry[i].replace(/\s/g, '') + ","
         }
     }
+
+    //OFFSET NOW WORKS FOR PANTRY SEARCH, MAY NEED TO CHANGE INCREMENT AMOUNT, FIX FRONTEND SO IT SAYS NO
+    //MORE RECIPES WHEN THE LIST IS EMPTY
+
+    User.updateOne({username: req.user.username}, 
+    {offsetMin:min, offsetMax:max}, (err, docs) => {
+        if (err) {
+            console.log(err)
+            //res.send({data: "Error"})
+        } else {
+            //console.log("UPDATED OFFSET")
+            //res.send({data: "Updated pantry"})
+        }
+    });
     
-    const searchURL = "https://api.spoonacular.com/recipes/findByIngredients?apiKey=" + process.env.SPOONACULAR_API_KEY + ings + rank
+    const searchURL = "https://api.spoonacular.com/recipes/findByIngredients?&apiKey=" + process.env.SPOONACULAR_API_KEY + ings + rank + offset
 
     axios.get(searchURL)
     .then(function (response) {
+
+        //need to fix algorithm here to get new recipes to user instead of ones they have already added
+        //maybe add a state in findRecipes that I can send here to keep track of current sessions progress, use it as an offset
+
         res.send({data: response.data})
     })
     .catch(function (error) {
         res.send({data: error})
     })
-    //res.send({data: "Hey there"})
 });
 
 
