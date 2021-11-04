@@ -6,7 +6,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faArrowLeft } from '@fortawesome/free-solid-svg-icons'
 
   export default function FindRecipes() {
-    const [user, setUser] = useState(null)
+    //const [user, setUser] = useState(null)
     const [loading, setLoading] = useState(true)
     const [activeSearch, setActiveSearch] = useState("virtual pantry")
     const [virtualPantryClasses, setvirtualPantryClasses] = useState("text-red-500 font-bold");
@@ -18,6 +18,7 @@ import { faArrowLeft } from '@fortawesome/free-solid-svg-icons'
     const [pantry, setPantry] = useState(null);
     const [selectedRecipe, setSelectedRecipe] = useState(null);
     const [error, setError] = useState(null)
+    const [offset, setOffset] = useState(null)
 
     const cuisines = ["All Cuisines", "African", "American", "British", "Cajun", "Caribbean", "Chinese", "Eastern European",
     "European", "French", "German", "Greek", "Indian", "Irish", "Italian", "Japanese", "Jewish", "Korean",
@@ -36,8 +37,9 @@ import { faArrowLeft } from '@fortawesome/free-solid-svg-icons'
          if (res.data === "No user") {
            window.location.href = "/login";
          } else {
-          setUser(res)
+          //setUser(res)
           setPantry(res.pantry)
+          setOffset(0)
           setLoading(false)
          }
        })
@@ -50,6 +52,7 @@ import { faArrowLeft } from '@fortawesome/free-solid-svg-icons'
     const onChangeSearchCuisine = e => {
       const searchCuisine = e.target.value;
       setCuisineSearch(searchCuisine);
+      setOffset(0);
     };
 
     //change search options between virtual pantry and cuisine type
@@ -82,6 +85,7 @@ import { faArrowLeft } from '@fortawesome/free-solid-svg-icons'
       headers: {'Content-Type':'application/json'},
       body: JSON.stringify({
            "cuisine": cuisineSearch,
+           "offset" : offset,
       })
     })
      .then(res => res.json())
@@ -89,6 +93,7 @@ import { faArrowLeft } from '@fortawesome/free-solid-svg-icons'
       if (res.data.name === "Error") {
         setError("API ERROR, TRY AGAIN TOMORROW")
       } else{
+        setOffset(offset+12)
         setCuisineFoundRecipes(res.data.results)
       }
      })
@@ -140,12 +145,12 @@ import { faArrowLeft } from '@fortawesome/free-solid-svg-icons'
             </div>
           }
           {
-            cuisineFoundRecipes === null ? null 
+            cuisineFoundRecipes === null ? null : cuisineFoundRecipes.length === 0 ? <div>No more recipes match this cuisine</div>
             :
             cuisineFoundRecipes.map(recipe => {
               return (
                 <div key={recipe.id} className="border-2 text-center m-auto cursor-pointer" onClick={() => SelectRecipe(recipe.id)}>
-                  <img src={recipe.image} className="" />
+                  <img alt={"Image of " + recipe.title} src={recipe.image} className="" />
                   {recipe.title.length > 30 ? recipe.title.substr(0,30) + "..." : recipe.title}
                 </div>
               );
@@ -181,13 +186,13 @@ import { faArrowLeft } from '@fortawesome/free-solid-svg-icons'
                 </div>
               }
               {
-                pantryFoundRecipes === null ? null 
+                pantryFoundRecipes === null ? null : pantryFoundRecipes.length === 0 ? <div className="mt-10">No more recipes work with your pantry</div>
                 :
                 <div className="flex grid gap-4 grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
                   {pantryFoundRecipes.map(recipe => {
                     return (
                       <div key={recipe.id} className="border-2 text-center m-auto cursor-pointer" onClick={() => SelectRecipe(recipe.id)}>
-                        <img src={recipe.image} className="" />
+                        <img alt={"Image of " + recipe.title} src={recipe.image} className="" />
                         {recipe.title.length > 30 ? recipe.title.substr(0,30) + "..." : recipe.title}
                       </div>
                     );
@@ -208,7 +213,7 @@ import { faArrowLeft } from '@fortawesome/free-solid-svg-icons'
           <div>
               {
               selectedRecipe === null ?
-              <div className="flex">
+            <div className="flex">
               <div className="m-auto">
                 <h1 className="text-4xl text-center mb-4">Find Recipes</h1>
 

@@ -6,7 +6,7 @@ import Navbar from "./Navbar";
 import Loader from './Loader';
 
   export default function Home() {
-    const [user, setUser] = useState(null)
+    //const [user, setUser] = useState(null)
     const [loading, setLoading] = useState(true)
     const [ingredients, setIngredients] = useState(null)
     //array that will hold whether an ingredient should already be checked or not
@@ -25,7 +25,7 @@ import Loader from './Loader';
                 if (res.data === "No user") {
                   window.location.href = "/login";
                 } else {
-                setUser(res.username)
+                //setUser(res.username)
                 setPantry(res.pantry)
                 }
                 return res.pantry
@@ -38,11 +38,12 @@ import Loader from './Loader';
                  const temp = new Array(res.length).fill(false)
                  //setPantryState(new Array(res.length).fill(false))
                  for (let i = 0; i < pantry.length; i++) {
-                   const update = res.map((item, index) => {
+                   res.map((item, index) => {
                      //console.log(item.name)
                      if (pantry.includes(item.name)) {
                        temp[index] = true;
                      }
+                     return 0;
                    })
                  }
                  setPantryState(temp)

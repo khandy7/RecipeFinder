@@ -14,11 +14,12 @@ router.get('', (req, res) => {
 //Get recipes based on cuisine type
 router.post('/cuisineSearch', (req, res) => {
     let cuisine = ""
+    const offset = "&offset=" + req.body.offset
     if (req.body.cuisine !== "All Cuisines") {
         cuisine = "&cuisine=" + req.body.cuisine
     }
 
-    const searchURL = "https://api.spoonacular.com/recipes/complexSearch?apiKey=" + process.env.SPOONACULAR_API_KEY + cuisine
+    const searchURL = "https://api.spoonacular.com/recipes/complexSearch?number=12&apiKey=" + process.env.SPOONACULAR_API_KEY + cuisine + offset
     axios.get(searchURL)
     .then(function (response) {
        // console.log(response.data)
@@ -40,13 +41,12 @@ router.post("/pantrySearch", (req, res) => {
     let max = req.user.offsetMax
     if (req.body.rank === 1) {
         offset += max
-        max += 3
+        max += 6
     } else {
         offset += min
-        min += 3
+        min += 6
     }
-    console.log(min)
-    console.log(max)
+
     const userRecipes = req.user.recipes
 
     //parse ingredients to get list that works with api
@@ -59,9 +59,6 @@ router.post("/pantrySearch", (req, res) => {
             ings += "+" + req.body.pantry[i].replace(/\s/g, '') + ","
         }
     }
-
-    //OFFSET NOW WORKS FOR PANTRY SEARCH, MAY NEED TO CHANGE INCREMENT AMOUNT, FIX FRONTEND SO IT SAYS NO
-    //MORE RECIPES WHEN THE LIST IS EMPTY
 
     User.updateOne({username: req.user.username}, 
     {offsetMin:min, offsetMax:max}, (err, docs) => {

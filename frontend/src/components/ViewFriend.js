@@ -6,8 +6,8 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faArrowLeft } from '@fortawesome/free-solid-svg-icons'
 
 export default function ViewFriend(props) {
-    const [user, setUser] = useState(null)
-    const [userRecipes, setUserRecipes] = useState(null)
+    //const [user, setUser] = useState(null)
+    //const [userRecipes, setUserRecipes] = useState(null)
     const [friend, setFriend] = useState(null)
     const [friendRecipes, setFriendRecipes] = useState(null)
     const [loading, setLoading] = useState(true)
@@ -23,8 +23,8 @@ export default function ViewFriend(props) {
           if (res.data === "No user") {
             window.location.href = "/login";
           } else {
-           setUser(res)
-           setUserRecipes(res.recipes)
+           //setUser(res)
+           //setUserRecipes(res.recipes)
            setLoading(false)
           }
         })
@@ -40,9 +40,9 @@ export default function ViewFriend(props) {
             })
             .then(res => res.json())
             .then(res => {
-                if (res.data == "Error") {
+                if (res.data === "Error") {
                     console.log("ERROR GETTING FRIEND")
-                } else if (res.data == "User does not exist") {
+                } else if (res.data === "User does not exist") {
                     console.log("User does not exist, weird error")
                 } else {
                     setFriend(res.data)
@@ -89,7 +89,7 @@ export default function ViewFriend(props) {
                                             return (
                                                 <div key={recipe[0]} className="text-center" onClick={() => setSelectedRecipe(recipe[0])}>
                                                     <div className="text-center m-auto cursor-pointer">
-                                                    <img src={recipe[2]} className="" />
+                                                    <img alt={"Image of " + recipe[1]} src={recipe[2]} className="" />
                                                         {recipe[1].length > 30 ? recipe[1].substr(0,30) + "..." : recipe[1]}
                                                     </div>
                                                 </div>

@@ -8,7 +8,7 @@ import { Link } from 'react-router-dom';
 export default function ViewMyRecipe(props) {
     const [recipe, setRecipe] = useState(null);
     const [selected, setSelected] = useState(null);
-    const [user, setUser] = useState(null);
+    //const [user, setUser] = useState(null);
     const [userRecipes, setUserRecipes] = useState(null);
     const [rating, setRating] = useState(null);
     const [recipeIdx, setRecipeIdx] = useState(null);
@@ -23,7 +23,7 @@ export default function ViewMyRecipe(props) {
           if (res.data === "No user") {
             window.location.href = "/login";
           } else {
-           setUser(res)
+           //setUser(res)
            setUserRecipes(res.recipes)
            
            var found = false
@@ -185,7 +185,7 @@ export default function ViewMyRecipe(props) {
                                 })}
                                 </div>
                             }
-                            <img src={recipe.image} className="m-auto" />
+                            <img alt={"Image of " + recipe.title} src={recipe.image} className="m-auto" />
                             
                         </div>
                     </div>

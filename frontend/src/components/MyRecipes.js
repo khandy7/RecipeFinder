@@ -2,15 +2,11 @@ import { useState, useEffect } from 'react';
 import Navbar from "./Navbar";
 import Loader from './Loader';
 import {Link} from "react-router-dom"
-import ViewRecipe from "./ViewRecipe";
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faArrowLeft } from '@fortawesome/free-solid-svg-icons'
 
   export default function MyRecipes() {
-    const [user, setUser] = useState(null)
+    //const [user, setUser] = useState(null)
     const [loading, setLoading] = useState(true)
     const [recipes, setRecipes] = useState(null)
-    const [selectedRecipe, setSelectedRecipe] = useState(null)
 
     useEffect(() => {
        fetch("/api/v1/user")
@@ -19,7 +15,7 @@ import { faArrowLeft } from '@fortawesome/free-solid-svg-icons'
          if (res.data === "No user") {
            window.location.href = "/login";
          } else {
-          setUser(res.username)
+          //setUser(res.username)
           setRecipes(res.recipes.reverse())
           setLoading(false)
          }
@@ -45,7 +41,7 @@ import { faArrowLeft } from '@fortawesome/free-solid-svg-icons'
                       return (
                         <div key={recipe[0]} className="text-center">
                         <Link className="text-center m-auto cursor-pointer" to={"/viewRecipe/" + recipe[0]}>
-                          <img src={recipe[2]} className="" />
+                          <img alt={"Image of " + recipe[1]} src={recipe[2]} className="" />
                           {recipe[1].length > 30 ? recipe[1].substr(0,30) + "..." : recipe[1]}
                         </Link>
                         </div>

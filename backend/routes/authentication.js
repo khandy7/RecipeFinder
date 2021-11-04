@@ -11,6 +11,16 @@ router.post("/login", (req, res, next) => {
       else {
         req.logIn(user, (err) => {
           if (err) throw err;
+          User.updateOne({username: req.user.username}, 
+            {offsetMin:0, offsetMax:0}, (err, docs) => {
+                if (err) {
+                    console.log(err)
+                    //res.send({data: "Error"})
+                } else {
+                    //console.log("UPDATED OFFSET")
+                    //res.send({data: "Updated pantry"})
+                }
+          });
           res.send("Successfully Authenticated");
         });
       }

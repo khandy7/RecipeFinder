@@ -5,7 +5,7 @@ import Loader from './Loader';
 export default function ViewRecipe({ id }) {
     const [recipe, setRecipe] = useState(null);
     const [selected, setSelected] = useState(null);
-    const [user, setUser] = useState(null);
+    //const [user, setUser] = useState(null);
     const [userRecipes, setUserRecipes] = useState(null);
 
     useEffect(() => {
@@ -15,7 +15,7 @@ export default function ViewRecipe({ id }) {
           if (res.data === "No user") {
             window.location.href = "/login";
           } else {
-           setUser(res)
+           //setUser(res)
            setUserRecipes(res.recipes)
            
            var found = false
@@ -118,7 +118,7 @@ export default function ViewRecipe({ id }) {
                                 onClick={() => handleChange()}
                                 > REMOVE RECIPE</div>
                             }
-                            <img src={recipe.image} className="m-auto" />
+                            <img alt={"Image of " + recipe.title} src={recipe.image} className="m-auto" />
                         </div>
                     </div>
 
