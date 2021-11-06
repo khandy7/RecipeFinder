@@ -111,7 +111,7 @@ import Loader from './Loader';
           loading ? <Loader/>
           :
           <div>
-            <h1 className="text-4xl text-center mb-4">Virtual Pantry!</h1>
+            <h1 className="text-4xl text-center mb-4">Virtual Pantry</h1>
           {
             ingredients == null ? null :
             <div className="flex">
