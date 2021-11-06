@@ -23,4 +23,4 @@ jobs:
             sudo forever stopall
             cd RecipeFinder
             sudo git pull https://github.com/khandy7/RecipeFinder.git
-            touch IMADEITINHERE.LOOK '            
+            sudo touch IMADEITINHERE.LOOK '            
