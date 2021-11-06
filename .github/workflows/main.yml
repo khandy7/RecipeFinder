@@ -23,4 +23,9 @@ jobs:
             sudo forever stopall
             cd RecipeFinder
             sudo git pull https://github.com/khandy7/RecipeFinder.git
-            sudo touch IMADEITINHERE.LOOK '            
+            cd backend
+            sudo forever start server.js
+            cd ../frontend
+            sudo npm run build
+            sudo systemctl restart nginx
+            '            
