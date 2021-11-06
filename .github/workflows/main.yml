@@ -20,4 +20,9 @@ jobs:
             echo "$PRIVATE_KEY" > recipe-finder.pem && chmod 600 recipe-finder.pem
             ssh -o StrictHostKeyChecking=no -i recipe-finder.pem ${USER_NAME}@${HOSTNAME} '
             cd /home/ubuntu/
-            touch IMANEWFILE.txt '            
+            sudo forever stopall
+            sudo git checkout master &&
+            sudo git fetch --all &&
+            sudo git reset --hard origin/master &&
+            sudo git pull origin master
+            touch IMANEWFILE2.txt '            
