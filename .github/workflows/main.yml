@@ -21,8 +21,6 @@ jobs:
             ssh -o StrictHostKeyChecking=no -i recipe-finder.pem ${USER_NAME}@${HOSTNAME} '
             cd /home/ubuntu/
             sudo forever stopall
-            sudo git checkout master &&
-            sudo git fetch --all &&
-            sudo git reset --hard origin/master &&
-            sudo git pull origin master
-            touch IMANEWFILE2.txt '            
+            sudo git pull https://github.com/khandy7/RecipeFinder.git
+            cd RecipeFinder
+            touch IMADEITINHERE.LOOK '            
