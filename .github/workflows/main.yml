@@ -17,7 +17,7 @@ jobs:
             HOSTNAME : ${{ secrets.HOSTNAME  }}
             USER_NAME : ${{ secrets.USERNAME  }}
         run: |
-            echo "$PRIVATE_KEY" > private_key && chmod 600 private_key
-            ssh -i private_key ${USER_NAME}@${HOSTNAME} '
+            echo "$PRIVATE_KEY" > private_key.pem && chmod 600 private_key.pem
+            ssh -i private_key.pem ${USER_NAME}@${HOSTNAME} '
             cd /home/ubuntu/
             touch IMANEWFILE.txt '            
