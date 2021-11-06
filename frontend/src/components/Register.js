@@ -36,7 +36,7 @@ import Loader from './Loader';
               password: registerPassword,
             },
             withCredentials: true,
-            url: "http://localhost:5000/api/v1/auth/register",
+            url: "http://ec2-54-214-74-5.us-west-2.compute.amazonaws.com/api/v1/auth/register",
           }).then((res) => {
               if (res.data === "User created") {
                 window.location.href = "/login"

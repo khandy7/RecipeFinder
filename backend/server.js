@@ -76,5 +76,8 @@ app.use("/api/v1/ingredients", ingredientRoutes);
 //Search for recipes routes
 app.use("/api/v1/findRecipes", searchRoutes);
 
-
+app.get("*", (req, res) => {
+	console.log(req.url)
+	res.send({username:"heythere", data:"Here i am"})
+})
 //--------------------END-ROUTES--------------------

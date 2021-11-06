@@ -32,7 +32,7 @@ import Loader from './Loader';
           password: loginPassword,
         },
         withCredentials: true,
-        url: "http://localhost:5000/api/v1/auth/login",
+        url: "http://ec2-54-214-74-5.us-west-2.compute.amazonaws.com/api/v1/auth/login",
       }).then((res) => {
         if (res.data === "Successfully Authenticated") {
           window.location.href = "/"

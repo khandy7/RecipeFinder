@@ -20,7 +20,7 @@ export default function Navbar({ fixed }) {
     axios({
       method: "GET",
       withCredentials: true,
-      url: "http://localhost:5000/api/v1/auth/logout",
+      url: "http://ec2-54-214-74-5.us-west-2.compute.amazonaws.com/api/v1/auth/logout",
     }).then((res) => window.location.href = "/login");
   };
 
