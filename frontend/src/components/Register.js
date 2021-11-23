@@ -1,6 +1,5 @@
 import { useState, useEffect } from 'react';
 import Navbar from './Navbar';
-import axios from "axios";
 import Loader from './Loader';
 
   export default function Register() {
@@ -28,16 +27,27 @@ import Loader from './Loader';
        // if (registerUsername.length() < 4) {
        //   setRegisterError("Username must be more than 3 characters long")
         //} else {
-          axios({
-            method: "POST",
-            data: {
-              fullName: fullName,
-              username: registerUsername,
-              password: registerPassword,
-            },
-            withCredentials: true,
-            url: "http://ec2-54-214-74-5.us-west-2.compute.amazonaws.com/api/v1/auth/register",
-          }).then((res) => {
+          fetch("/api/v1/auth/register", {
+            method: 'POST',
+            headers: {'Content-Type':'application/json'},
+            body: JSON.stringify({
+                "fullName": fullName,
+                "username": registerUsername,
+                "password": registerPassword,
+              })
+            })
+          // axios({
+          //   method: "POST",
+          //   data: {
+          //     fullName: fullName,
+          //     username: registerUsername,
+          //     password: registerPassword,
+          //   },
+          //   withCredentials: true,
+          //   url: "http://ec2-54-214-74-5.us-west-2.compute.amazonaws.com/api/v1/auth/register",
+          // })
+          .then(res => res.json())
+          .then((res) => {
               if (res.data === "User created") {
                 window.location.href = "/login"
               } else {

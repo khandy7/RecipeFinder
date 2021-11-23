@@ -21,7 +21,7 @@ router.post("/login", (req, res, next) => {
                     //res.send({data: "Updated pantry"})
                 }
           });
-          res.send("Successfully Authenticated");
+          res.send({"data": "Successfully Authenticated"});
         });
       }
     })(req, res, next);
@@ -52,7 +52,7 @@ router.post("/login", (req, res, next) => {
           offsetMax: 0,
         });
         await newUser.save();
-        res.send("User created");
+        res.send({"data": "User created"});
       }
     });
   });

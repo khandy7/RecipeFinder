@@ -1,7 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import Navbar from './Navbar';
-import axios from "axios";
 import Loader from './Loader';
 
   export default function Login() {
@@ -25,18 +24,30 @@ import Loader from './Loader';
 
     const login = () => {
       setLoginError(null);
-      axios({
-        method: "POST",
-        data: {
-          username: loginUsername,
-          password: loginPassword,
-        },
-        withCredentials: true,
-        url: "http://ec2-54-214-74-5.us-west-2.compute.amazonaws.com/api/v1/auth/login",
-      }).then((res) => {
-        if (res.data === "Successfully Authenticated") {
+      fetch("/api/v1/auth/login", {
+        method: 'POST',
+        headers: {'Content-Type':'application/json'},
+        body: JSON.stringify({
+             "username": loginUsername,
+             "password": loginPassword,
+          })
+        })
+        .then(res => res.json())
+        .then((res) => {
+      // axios({
+      //   method: "POST",
+      //   data: {
+      //     username: loginUsername,
+      //     password: loginPassword,
+      //   },
+      //   withCredentials: true,
+      //   url: "http://ec2-54-214-74-5.us-west-2.compute.amazonaws.com/api/v1/auth/login",
+      // }).then((res) => {
+        console.log(res)
+      if (res.data === "Successfully Authenticated") {
           window.location.href = "/"
         } else {
+
           setLoginError("Incorrect username or password.");
           console.log("Incorrect username or password.");
         }

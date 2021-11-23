@@ -1,5 +1,4 @@
 import React from "react";
-import axios from "axios";
 import { useEffect } from "react";
 import { Link } from "react-router-dom";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
@@ -17,11 +16,7 @@ export default function Navbar({ fixed }) {
   }, []) 
 
   const logout = () => {
-    axios({
-      method: "GET",
-      withCredentials: true,
-      url: "http://ec2-54-214-74-5.us-west-2.compute.amazonaws.com/api/v1/auth/logout",
-    }).then((res) => window.location.href = "/login");
+    fetch("/api/v1/auth/logout").then((res) => window.location.href = "/login");
   };
 
   return (
