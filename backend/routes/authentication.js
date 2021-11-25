@@ -7,7 +7,7 @@ const router = express.Router();
 router.post("/login", (req, res, next) => {
     passport.authenticate("local", (err, user, info) => {
       if (err) throw err;
-      if (!user) res.send("User does not exist");
+      if (!user) res.send({"data": "User does not exist"});
       else {
         req.logIn(user, (err) => {
           if (err) throw err;
@@ -30,14 +30,14 @@ router.post("/login", (req, res, next) => {
   
   router.get("/logout", (req, res, next) => {
       req.logOut();
-      res.send("LOGGED OUT");
+      res.send({"data":"LOGGED OUT"});
   });
   
   
   router.post("/register", (req, res) => {
     User.findOne({username: req.body.username}, async (err, doc) => {
       if (err) throw err;
-      if (doc) res.send("User Already Exists");
+      if (doc) res.send({"data":"User Already Exists"});
       if (!doc) {
         const hashedPassword = await bcrypt.hash(req.body.password, 10);
   

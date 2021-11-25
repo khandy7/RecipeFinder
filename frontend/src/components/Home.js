@@ -13,7 +13,7 @@ import Loader from './Loader';
     const [pantry, setPantry] = useState(null)
     const [pantryState, setPantryState] = useState(null)
 
-    const chosen = "border-pink-300 bg-pink-300 font-bold "
+    const chosen = "border-yellow-400 bg-yellow-400 font-bold "
     const notChosen = ""
     const base = " border border-2 cursor-pointer grid grid-cols-2"
 
@@ -111,7 +111,8 @@ import Loader from './Loader';
           loading ? <Loader/>
           :
           <div>
-            <h1 className="text-4xl text-center mb-4">Virtual Pantry</h1>
+            <h1 className="text-4xl text-center mb-4 font-bold">Virtual Pantry</h1>
+            <p className="text-lg text-center">Add ingredients from your kitchen below to start finding recipes!</p>
           {
             ingredients == null ? null :
             <div className="flex">

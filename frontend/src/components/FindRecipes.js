@@ -9,7 +9,7 @@ import { faArrowLeft } from '@fortawesome/free-solid-svg-icons'
     //const [user, setUser] = useState(null)
     const [loading, setLoading] = useState(true)
     const [activeSearch, setActiveSearch] = useState("virtual pantry")
-    const [virtualPantryClasses, setvirtualPantryClasses] = useState("text-red-500 font-bold");
+    const [virtualPantryClasses, setvirtualPantryClasses] = useState("text-red-400 font-bold");
     const [cuisineClasses, setCuisineClasses] = useState("text-gray-500");
     const [cuisineSearch, setCuisineSearch] = useState("All Cuisines")
     const [pantrySearchRank, setPantrySearchRank] = useState("Maximize Used Ingredients")
@@ -26,7 +26,7 @@ import { faArrowLeft } from '@fortawesome/free-solid-svg-icons'
 
     const pantryRanks = ["Maximize Used Ingredients", "Minimize Missing Ingredients"]
 
-    const active = "text-red-500 font-bold"
+    const active = "text-red-400 font-bold"
     const notActive = "text-gray-500"
 
     //if User exists grab it, if not redirect to login page
@@ -124,18 +124,20 @@ import { faArrowLeft } from '@fortawesome/free-solid-svg-icons'
    const SearchByCuisine = () => {
      return(
         <div>
-        <select value={cuisineSearch} onChange={onChangeSearchCuisine}>
-          {cuisines.map(cuisine => {
-            return (
-              <option value={cuisine} key={cuisine}> {cuisine.substr(0, 20)} </option>
-            )
-          })}
-      </select>
-      <button className="bg-pink-500 hover:bg-pink-700 text-white font-bold py-2 px-4 rounded"
-        onClick={PerformCusineSearch}
-      >
-        Search
-      </button>
+          <div className="flex items-center justify-center mb-4">
+              <select className="p-2 mt-4 mr-16 border border-black" value={cuisineSearch} onChange={onChangeSearchCuisine}>
+              {cuisines.map(cuisine => {
+                return (
+                  <option value={cuisine} key={cuisine}> {cuisine.substr(0, 20)} </option>
+                )
+              })}
+           </select>
+           <button className="bg-yellow-400 hover:bg-yellow-500 text-white font-bold py-2 px-4 rounded mt-3"
+            onClick={PerformCusineSearch}
+             >
+            Search
+            </button>
+          </div>
         <div className="flex grid gap-4 grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
           {
             error === null ? null
@@ -166,18 +168,20 @@ import { faArrowLeft } from '@fortawesome/free-solid-svg-icons'
      const SearchByPantry = () => {
        return(
          <div>
-             <select value={pantrySearchRank} onChange={onChangePantryRank}>
+           <div className="flex items-center justify-center mb-4 mr-1">
+           <select className="p-2 mt-4 mr-4 border border-black" value={pantrySearchRank} onChange={onChangePantryRank}>
                 {pantryRanks.map(rank => {
                 return (
                   <option value={rank} key={rank}> {rank} </option>
                 )
               })}
              </select>
-           <button className="bg-pink-500 hover:bg-pink-700 text-white font-bold py-2 px-4 rounded"
+           <button className="bg-yellow-400 hover:bg-yellow-500 text-white font-bold py-2 px-4 rounded mt-3"
             onClick={PerformPantrySearch}
           >
             Search
           </button>
+           </div>
               {
                 error === null ? null
                 :
@@ -217,8 +221,8 @@ import { faArrowLeft } from '@fortawesome/free-solid-svg-icons'
               <div className="m-auto">
                 <h1 className="text-4xl text-center mb-4">Find Recipes</h1>
 
-                <div className="grid grid-cols-2 gap-2 text-center">
-                  <button className={virtualPantryClasses} onClick={changeSearch}>Search by Virtual Pantry</button>
+                <div className="text-center">
+                  <button className={virtualPantryClasses + " mr-8"} onClick={changeSearch}>Search by Virtual Pantry</button>
                   <button className={cuisineClasses} onClick={changeSearch}>Search by Cuisine</button>
                 </div>
 
