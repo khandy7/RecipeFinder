@@ -13,6 +13,7 @@ import Register from "./components/Register";
 import NotFound from "./components/NotFound";
 import ViewMyRecipe from "./components/ViewMyRecipe";
 import ViewFriend from "./components/ViewFriend";
+import Sidebar from "./components/Sidebar";
 
 function App() {
   return (
@@ -54,6 +55,10 @@ function App() {
           render={(props) => (
             <ViewFriend {...props} />
           )} >
+          </Route>
+
+          <Route path="/sidebar">
+            <Sidebar />
           </Route>
 
           <Route>

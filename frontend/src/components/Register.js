@@ -80,7 +80,7 @@ import Loader from './Loader';
                     Or{' '}
                     <Link to="/login">
                     <a href="#" className="font-medium text-blue-500 hover:text-blue-700">
-                      sign in to your account here
+                      sign in to your existing account here
                     </a>
                     </Link>
                   </p>
