@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import Loader from './Loader';
 
 
-export default function ViewRecipe({ id }) {
+export default function ViewRecipe({ id, missing, used }) {
     const [recipe, setRecipe] = useState(null);
     const [selected, setSelected] = useState(null);
     //const [user, setUser] = useState(null);
@@ -121,37 +121,47 @@ export default function ViewRecipe({ id }) {
                             <img alt={"Image of " + recipe.title} src={recipe.image} className="m-auto" />
                         </div>
                     </div>
+                    {
+                        missing === null ? null :
+                        <div className="text-center p-6">
+                            <p className="font-bold m-auto">Missing Ingredients: <span className="font-normal">{missing.length}</span></p>
+                            <p className="font-bold m-auto">Ingredients in Pantry: <span className="font-normal">{used.length}</span></p>
+                        </div>
+                    }
+                    <div className="text-center mt-6 ">
+                        <div className=" border border-black border-4 p-2 m-2 rounded">
+                            <span className="font-bold text-xl">INGREDIENTS</span>
+                        {recipe.extendedIngredients == null ? 
+                            <div>Cannot find ingredients</div>    
+                            :
+                            <ul className="sm:grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 mt-4">
+                                {recipe.extendedIngredients.map(ing => {
+                                    return (
+                                        <li className="mb-2">
+                                            <span className="underline">{ing.name}:</span> {ing.amount} {ing.unit}
+                                        </li>
+                                    )
+                                })}
+                            </ul>
+                        }
+                        </div>
 
-                    <div className="text-center">
-                        <span className="font-bold text-xl">INGREDIENTS</span>
-                    {recipe.extendedIngredients == null ? 
-                        <div>Cannot find ingredients</div>    
-                        :
-                        <div>
-                            {recipe.extendedIngredients.map(ing => {
+                        <div className="p-4">
+                        <span className="font-bold text-xl">INSTRUCTIONS</span>
+                        {recipe.analyzedInstructions[0] == null ? 
+                        <div>No instructions found</div> 
+                        : 
+                            <div>
+                            {recipe.analyzedInstructions[0].steps.map(step => {
                                 return (
-                                    <div>
-                                        {ing.name}: {ing.amount} {ing.unit}
+                                    <div className="mb-4" key={step.number}>
+                                        <span className="font-bold">{step.number}.</span>  {step.step}
                                     </div>
                                 )
                             })}
-                        </div>
+                            </div>
                         }
-
-                    <span className="font-bold text-xl">INSTRUCTIONS</span>
-                    {recipe.analyzedInstructions[0] == null ? 
-                    <div>No instructions found</div> 
-                    : 
-                        <div>
-                        {recipe.analyzedInstructions[0].steps.map(step => {
-                            return (
-                                <div key={step.number}>
-                                    <span className="font-bold">{step.number}.</span>  {step.step}
-                                </div>
-                            )
-                        })}
                         </div>
-                    }
                     </div>
                 </div>
             }

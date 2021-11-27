@@ -74,11 +74,9 @@ router.post("/pantrySearch", (req, res) => {
     const searchURL = "https://api.spoonacular.com/recipes/findByIngredients?&apiKey=" + process.env.SPOONACULAR_API_KEY + ings + rank + offset
 
     axios.get(searchURL)
-    .then(function (response) {
+    .then(function (response) { 
 
-        //need to fix algorithm here to get new recipes to user instead of ones they have already added
-        //maybe add a state in findRecipes that I can send here to keep track of current sessions progress, use it as an offset
-
+        //console.log(response.data)
         res.send({data: response.data})
     })
     .catch(function (error) {

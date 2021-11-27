@@ -17,6 +17,8 @@ import { faArrowLeft } from '@fortawesome/free-solid-svg-icons'
     const [pantryFoundRecipes, setPantryFoundRecipes] = useState(null);
     const [pantry, setPantry] = useState(null);
     const [selectedRecipe, setSelectedRecipe] = useState(null);
+    const [missingIngs, setMissingIngs] = useState(null);
+    const [usedIngs, setUsedIngs] = useState(null);
     const [error, setError] = useState(null)
     const [offset, setOffset] = useState(null)
 
@@ -45,7 +47,9 @@ import { faArrowLeft } from '@fortawesome/free-solid-svg-icons'
        })
    }, [])
 
-   function SelectRecipe(id) {
+   function SelectRecipe(id, missing, used) {
+     setMissingIngs(missing)
+     setUsedIngs(used)
      setSelectedRecipe(id)
    }
 
@@ -151,7 +155,7 @@ import { faArrowLeft } from '@fortawesome/free-solid-svg-icons'
             :
             cuisineFoundRecipes.map(recipe => {
               return (
-                <div key={recipe.id} className="border-2 text-center m-auto cursor-pointer" onClick={() => SelectRecipe(recipe.id)}>
+                <div key={recipe.id} className="border-2 text-center m-auto cursor-pointer" onClick={() => SelectRecipe(recipe.id, null, null)}>
                   <img alt={"Image of " + recipe.title} src={recipe.image} className="" />
                   {recipe.title.length > 30 ? recipe.title.substr(0,30) + "..." : recipe.title}
                 </div>
@@ -195,7 +199,7 @@ import { faArrowLeft } from '@fortawesome/free-solid-svg-icons'
                 <div className="flex grid gap-4 grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
                   {pantryFoundRecipes.map(recipe => {
                     return (
-                      <div key={recipe.id} className="border-2 text-center m-auto cursor-pointer" onClick={() => SelectRecipe(recipe.id)}>
+                      <div key={recipe.id} className="border-2 text-center m-auto cursor-pointer" onClick={() => SelectRecipe(recipe.id, recipe.missedIngredients, recipe.usedIngredients)}>
                         <img alt={"Image of " + recipe.title} src={recipe.image} className="" />
                         {recipe.title.length > 30 ? recipe.title.substr(0,30) + "..." : recipe.title}
                       </div>
@@ -238,7 +242,7 @@ import { faArrowLeft } from '@fortawesome/free-solid-svg-icons'
          :
          <div className="">
            <FontAwesomeIcon className="ml-8 text-5xl font-bold cursor-pointer" icon={faArrowLeft} onClick={()=> SelectRecipe(null)} />
-           <ViewRecipe id={selectedRecipe}/>
+           <ViewRecipe id={selectedRecipe} missing={missingIngs} used={usedIngs} />
          </div>
           }
         </div>

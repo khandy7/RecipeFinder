@@ -190,22 +190,25 @@ export default function ViewMyRecipe(props) {
                         </div>
                     </div>
 
-                    <div className="text-center">
-                        <span className="font-bold text-xl">INGREDIENTS</span>
-                    {recipe.extendedIngredients == null ? 
-                        <div>Cannot find ingredients</div>    
-                        :
-                        <div>
-                            {recipe.extendedIngredients.map(ing => {
-                                return (
-                                    <div>
-                                        {ing.name}: {ing.amount} {ing.unit}
-                                    </div>
-                                )
-                            })}
-                        </div>
+                    <div className="text-center mt-6">
+                    <div className=" border border-black border-4 p-2 m-2 rounded">
+                            <span className="font-bold text-xl">INGREDIENTS</span>
+                        {recipe.extendedIngredients == null ? 
+                            <div>Cannot find ingredients</div>    
+                            :
+                            <ul className="sm:grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 mt-4">
+                                {recipe.extendedIngredients.map(ing => {
+                                    return (
+                                        <li className="mb-2">
+                                            <span className="underline">{ing.name}:</span> {ing.amount} {ing.unit}
+                                        </li>
+                                    )
+                                })}
+                            </ul>
                         }
+                        </div>
 
+                    <div className="p-4">
                     <span className="font-bold text-xl">INSTRUCTIONS</span>
                     {recipe.analyzedInstructions[0] == null ? 
                     <div>No instructions found</div> 
@@ -213,13 +216,14 @@ export default function ViewMyRecipe(props) {
                         <div>
                         {recipe.analyzedInstructions[0].steps.map(step => {
                             return (
-                                <div key={step.number}>
+                                <div className="mb-4" key={step.number}>
                                     <span className="font-bold">{step.number}.</span>  {step.step}
                                 </div>
                             )
                         })}
                         </div>
                     }
+                    </div>
                     </div>
                 </div>
             }
