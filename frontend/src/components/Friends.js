@@ -2,6 +2,8 @@ import { useState, useEffect } from 'react';
 import Navbar from "./Navbar";
 import Loader from './Loader';
 import { Link } from 'react-router-dom';
+import { faPizzaSlice, faHamburger, faIceCream } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
   export default function Friends() {
     const [user, setUser] = useState(null)
@@ -85,11 +87,18 @@ import { Link } from 'react-router-dom';
             {
               !friends ? null : friends.length === 0 
               ? <div className="text-center m-4">No friends yet</div> 
-              : <div className="m-4 flex grid grid-cols-3">
-                  {friends.map(friend => {
+              : <div className="m-4 flex grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+                  {friends.map((friend, index) => {
                   return (
-                    <Link className="text-center" key={friend} to={"/viewFriend/" + friend}>
-                      {friend}
+                    <Link className="text-center border border-black m-4 h-10" key={friend} to={"/viewFriend/" + friend}>
+                      <div className="grid grid-cols-2">
+                        {
+                          index % 3 == 0 ? <FontAwesomeIcon className="ml-24 sm:ml-16 mt-1 text-2xl text-yellow-700" icon={faPizzaSlice}/> : index % 3 === 1 ?
+                          <FontAwesomeIcon className="ml-24 sm:ml-16 mt-1 text-2xl text-yellow-400" icon={faHamburger}/> : index % 3 == 2 ?
+                          <FontAwesomeIcon className="ml-24 sm:ml-16 mt-1 text-2xl text-red-400" icon={faIceCream}/> : null
+                        }
+                        <p className="mr-20 mt-1 text-xl">{friend}</p>
+                      </div>
                     </Link>
                   );
                 })}
