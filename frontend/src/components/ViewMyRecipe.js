@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import Loader from './Loader';
 import Navbar from './Navbar';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faArrowLeft } from '@fortawesome/free-solid-svg-icons'
+import { faArrowLeft, faCheck, faTimes } from '@fortawesome/free-solid-svg-icons'
 import { Link } from 'react-router-dom';
 
 export default function ViewMyRecipe(props) {
@@ -11,6 +11,10 @@ export default function ViewMyRecipe(props) {
     //const [user, setUser] = useState(null);
     const [userRecipes, setUserRecipes] = useState(null);
     const [rating, setRating] = useState(null);
+    const [missing, setMissing] = useState(null);
+    const [used, setUsed] = useState(null);
+    const [pantryState, setPantryState] = useState(null);
+    const [userPantry, setUserPantry] = useState(null);
     const [recipeIdx, setRecipeIdx] = useState(null);
     const [hover, setHover] = useState(0);
     
@@ -25,7 +29,7 @@ export default function ViewMyRecipe(props) {
           } else {
            //setUser(res)
            setUserRecipes(res.recipes)
-           
+           setUserPantry(res.pantry)
            var found = false
            var idx = -1
            for (let i = 0; i < res.recipes.length; i++) {
@@ -59,8 +63,29 @@ export default function ViewMyRecipe(props) {
         .then(res => res.json())
         .then(res => {
             setRecipe(res.data)
+            //console.log(res.data.extendedIngredients)
+            if (userPantry !== null) {
+                let tempStates = new Array(res.data.extendedIngredients.length).fill(false)
+                let missing = 0
+                let used = 0
+                for (let i = 0; i < res.data.extendedIngredients.length; i++) {
+                    let ing = res.data.extendedIngredients[i].name
+                    let result = userPantry.find((cur) => {
+                        return cur === ing; 
+                    })
+                    if (result !== undefined) {
+                        tempStates[i] = true
+                        used += 1
+                    } else {
+                        missing += 1
+                    }
+                }
+                setPantryState(tempStates)
+                setMissing(missing)
+                setUsed(used)
+            }
         })
-    }, [])
+    }, [userPantry])
 
 
     function handleChange() {
@@ -91,11 +116,9 @@ export default function ViewMyRecipe(props) {
           })
           .then(res => res.json())
           .then(res => {
-              console.log(res.data)
             if (res.data === "Error") {
               console.log("ERROR: Server error occured")
             } else{
-                console.log("IN HERE")
                 setRating(null)
                 setHover(null)
                 setUserRecipes(temp)
@@ -144,12 +167,12 @@ export default function ViewMyRecipe(props) {
             {
                 recipe === null ? <Loader />
                 :
-                <div>
+                <div className="text-lg">
                 <Link to="/myrecipes">
                     <FontAwesomeIcon className="ml-8 text-5xl font-bold cursor-pointer" icon={faArrowLeft} />
                 </Link>
                     <div className="flex">
-                        <div className="text-center text-3xl font-bold m-auto">
+                        <div className="text-center text-4xl font-bold m-auto">
                             {recipe.title}
                             {
                                 selected === null ? null : selected === false 
@@ -167,7 +190,7 @@ export default function ViewMyRecipe(props) {
                             {
                                 !selected ? null 
                                 :
-                                <div className="star-rating text-center text-3xl">
+                                <div className="star-rating text-center text-4xl font-sans">
                                 {[...Array(5)].map((star, index) => {
                                     index += 1;
                                     return (
@@ -190,23 +213,35 @@ export default function ViewMyRecipe(props) {
                         </div>
                     </div>
 
-                    <div className="text-center mt-6">
+                    <div className="text-center mt-2">
+                    {
+                        pantryState === null ? null :
+                        <div className="text-center p-6">
+                            <p className="font-bold m-auto">Missing Ingredients: <span className="font-normal">{missing}</span></p>
+                            <p className="font-bold m-auto">Ingredients in Pantry: <span className="font-normal">{used}</span></p>
+                        </div>
+                    }
                     <div className=" border border-black border-4 p-2 m-2 rounded">
                             <span className="font-bold text-xl">INGREDIENTS</span>
                         {recipe.extendedIngredients == null ? 
                             <div>Cannot find ingredients</div>    
                             :
+                            <div>
                             <ul className="sm:grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 mt-4">
-                                {recipe.extendedIngredients.map(ing => {
+                                {recipe.extendedIngredients.map((ing, index) => {
                                     return (
-                                        <li className="mb-2">
+                                        <li className="mb-3">
                                             <span className="underline">{ing.name}:</span> {ing.amount} {ing.unit}
+                                            {pantryState === null ? null : pantryState[index] === false ? 
+                                            <FontAwesomeIcon className="ml-1 text-lg text-red-500"  icon={faTimes}/>
+                                             : <FontAwesomeIcon className="ml-1 text-lg text-green-500" icon={faCheck}/>}
                                         </li>
                                     )
                                 })}
                             </ul>
+                            </div>
                         }
-                        </div>
+                    </div>
 
                     <div className="p-4">
                     <span className="font-bold text-xl">INSTRUCTIONS</span>

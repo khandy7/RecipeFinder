@@ -87,8 +87,8 @@ export default function ViewFriend(props) {
                                         <div className="grid gap-2 md:grid-cols-2 lg:grid-cols-3 p-2">
                                             {friendRecipes.map(recipe => {
                                             return (
-                                                <div key={recipe[0]} className="text-center" onClick={() => setSelectedRecipe(recipe[0])}>
-                                                    <div className="text-center m-auto cursor-pointer">
+                                                <div key={recipe[0]} className="text-center border border-black p-2 m-4" onClick={() => setSelectedRecipe(recipe[0])}>
+                                                    <div className="text-center m-auto cursor-pointer  text-lg">
                                                     <img alt={"Image of " + recipe[1]} src={recipe[2]} className="" />
                                                         {recipe[1].length > 30 ? recipe[1].substr(0,30) + "..." : recipe[1]}
                                                     </div>

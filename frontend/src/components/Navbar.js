@@ -25,7 +25,7 @@ export default function Navbar({ fixed }) {
         <div className="container px-4 mx-auto flex flex-wrap items-center justify-between">
           <div className="w-full relative flex justify-between lg:w-auto lg:static lg:block lg:justify-start">
             <Link
-              className="text-sm font-bold leading-relaxed inline-block mr-4 py-2 whitespace-nowrap uppercase text-white"
+              className=" font-bold leading-relaxed inline-block mr-4 py-2 whitespace-nowrap uppercase text-white"
               to="/"
               onClick={() => {
                 if (navbarOpen) {
@@ -36,7 +36,7 @@ export default function Navbar({ fixed }) {
               Recipe Finder
             </Link>
             <button
-              className="text-white cursor-pointer text-xl leading-none px-3 py-1 border border-solid border-transparent rounded bg-transparent block lg:hidden outline-none focus:outline-none"
+              className="text-white cursor-pointer text-3xl leading-none px-3 py-1 border border-solid border-transparent rounded bg-transparent block lg:hidden outline-none focus:outline-none"
               type="button"
               onClick={() => setNavbarOpen(!navbarOpen)}
             >
@@ -56,7 +56,7 @@ export default function Navbar({ fixed }) {
             <ul className="flex flex-col lg:flex-row list-none lg:ml-auto">
             <li className="nav-item">
                   <Link
-                    className="px-3 py-2 flex items-center text-xs uppercase font-bold leading-snug text-white hover:opacity-75"
+                    className="px-3 py-2 flex items-center uppercase font-bold leading-snug text-white hover:opacity-75"
                     to="/"
                     onClick={() => {
                       if (navbarOpen) {
@@ -69,7 +69,7 @@ export default function Navbar({ fixed }) {
                 </li>
               <li className="nav-item">
                 <Link
-                  className="px-3 py-2 flex items-center text-xs uppercase font-bold leading-snug text-white hover:opacity-75"
+                  className="px-3 py-2 flex items-center  uppercase font-bold leading-snug text-white hover:opacity-75"
                   to="/findrecipes"
                   onClick={() => {
                     if (navbarOpen) {
@@ -82,7 +82,7 @@ export default function Navbar({ fixed }) {
               </li>
                     <li className="nav-item">
                     <Link
-                      className="px-3 py-2 flex items-center text-xs uppercase font-bold leading-snug text-white hover:opacity-75"
+                      className="px-3 py-2 flex items-center uppercase font-bold leading-snug text-white hover:opacity-75"
                       to="/myrecipes"
                       onClick={() => {
                         if (navbarOpen) {
@@ -96,7 +96,7 @@ export default function Navbar({ fixed }) {
 
                     <li className="nav-item">
                     <Link
-                      className="px-3 py-2 flex items-center text-xs uppercase font-bold leading-snug text-white hover:opacity-75"
+                      className="px-3 py-2 flex items-center uppercase font-bold leading-snug text-white hover:opacity-75"
                       to="/friends"
                       onClick={() => {
                         if (navbarOpen) {
@@ -113,7 +113,7 @@ export default function Navbar({ fixed }) {
                 {
                   user != null ?
                   <button
-                  className="px-3 py-2 flex items-center text-xs uppercase font-bold leading-snug text-white hover:opacity-75"
+                  className="px-3 py-2 flex items-center uppercase font-bold leading-snug text-white hover:opacity-75"
                   onClick={() => {
                     if (navbarOpen) {
                         setNavbarOpen(!navbarOpen);

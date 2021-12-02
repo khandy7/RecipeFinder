@@ -1,5 +1,7 @@
 import { useState, useEffect } from 'react';
 import Loader from './Loader';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faTimes, faCheck } from '@fortawesome/free-solid-svg-icons';
 
 
 export default function ViewFriendRecipe({ id, rating, friend }) {
@@ -8,6 +10,10 @@ export default function ViewFriendRecipe({ id, rating, friend }) {
     //const [user, setUser] = useState(null);
     //const [ratingState, setRating] = useState(rating);
     const [userRecipes, setUserRecipes] = useState(null);
+    const [missing, setMissing] = useState(null);
+    const [used, setUsed] = useState(null);
+    const [pantryState, setPantryState] = useState(null);
+    const [userPantry, setUserPantry] = useState(null);
 
     useEffect(() => {
         fetch("/api/v1/user")
@@ -18,7 +24,7 @@ export default function ViewFriendRecipe({ id, rating, friend }) {
           } else {
            //setUser(res)
            setUserRecipes(res.recipes)
-           
+           setUserPantry(res.pantry)
            var found = false
            for (let i = 0; i < res.recipes.length; i++) {
                if (res.recipes[i][0] === String(id)) {
@@ -47,8 +53,28 @@ export default function ViewFriendRecipe({ id, rating, friend }) {
         .then(res => res.json())
         .then(res => {
             setRecipe(res.data)
+            let tempStates = new Array(res.data.extendedIngredients.length).fill(false)
+            let missing = 0
+            let used = 0
+            if (userPantry !== null) {
+                for (let i = 0; i < res.data.extendedIngredients.length; i++) {
+                    let ing = res.data.extendedIngredients[i].name
+                    let result = userPantry.find((cur) => {
+                        return cur === ing; 
+                    })
+                    if (result !== undefined) {
+                        tempStates[i] = true
+                        used += 1
+                    } else {
+                        missing += 1
+                    }
+                }
+                setPantryState(tempStates)
+                setMissing(missing)
+                setUsed(used)
+            }
         })
-    }, [])
+    }, [userPantry])
 
 
     function handleChange() {
@@ -101,10 +127,11 @@ export default function ViewFriendRecipe({ id, rating, friend }) {
             {
                 recipe === null ? <Loader />
                 :
-                <div>
+                <div className="text-lg">
         
+                
                     <div className="flex">
-                        <div className="text-center text-3xl font-bold m-auto">
+                        <div className="text-center text-4xl font-bold m-auto">
                             {recipe.title}
                             {
                                 selected === null ? null : selected === false 
@@ -121,7 +148,7 @@ export default function ViewFriendRecipe({ id, rating, friend }) {
                             }
                             <div>
                                 <p className="text-2xl">{friend}'s rating:</p>
-                                <div className="star-rating text-center text-3xl">
+                                <div className="star-rating text-center text-4xl font-sans">
                                     {
                                         rating === null || rating === 0 ? <div className="text-xl">No rating yet</div> :
                                         <div>
@@ -145,20 +172,32 @@ export default function ViewFriendRecipe({ id, rating, friend }) {
                     </div>
 
                     <div className="text-center mt-6">
+                    {
+                        missing === null ? null :
+                        <div className="text-center p-6">
+                            <p className="font-bold m-auto">Missing Ingredients: <span className="font-normal">{missing}</span></p>
+                            <p className="font-bold m-auto">Ingredients in Pantry: <span className="font-normal">{used}</span></p>
+                        </div>
+                    }
                     <div className=" border border-black border-4 p-2 m-2 rounded">
                             <span className="font-bold text-xl">INGREDIENTS</span>
                         {recipe.extendedIngredients == null ? 
                             <div>Cannot find ingredients</div>    
                             :
-                            <ul className="sm:grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 mt-4">
-                                {recipe.extendedIngredients.map(ing => {
-                                    return (
-                                        <li className="mb-2">
-                                            <span className="underline">{ing.name}:</span> {ing.amount} {ing.unit}
-                                        </li>
-                                    )
-                                })}
-                            </ul>
+                            <div>
+                                <ul className="sm:grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 mt-4">
+                                    {recipe.extendedIngredients.map((ing, index) => {
+                                        return (
+                                            <li className="mb-3">
+                                                <span className="underline">{ing.name}:</span> {ing.amount} {ing.unit}
+                                                {pantryState === null ? null : pantryState[index] === false ? 
+                                                <FontAwesomeIcon className="ml-1 text-2xl text-red-500"  icon={faTimes}/>
+                                             : <FontAwesomeIcon className="ml-1 text-2xl text-green-500" icon={faCheck}/>}
+                                            </li>
+                                        )
+                                    })}
+                                </ul>
+                            </div>
                         }
                         </div>
                         <div className="p-4">
