@@ -11,10 +11,13 @@
 - Must create an account and login to be able to access all features
 
 
-### Next features to add
+### Version 2 Features to Add
 - Add 'Load More' button on the Find Recipes page
 - Fix issue with some ingredients not being accounted for on View Recipe page
 - Add search bar to Virtual Pantry page to be able to search for ingredients to add easier
+- Add substitution options for ingredients when viewing a recipe
+- Passwords are currently hashed and stored in DB, I would like to switch to a third party authentication service as it provides better security than my currrent implementation
+
 
 #### Tech Stack: MERN
 #### Created by Kyle Handy
