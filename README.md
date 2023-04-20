@@ -1,5 +1,4 @@
 # Recipe Finder
-### Check it out here: http://ec2-54-214-74-5.us-west-2.compute.amazonaws.com/
 - Search for recipes based on ingredients in your fridge
 - Search for recipes based on cuisine type
 - Save recipes for later and rate the ones you have made
